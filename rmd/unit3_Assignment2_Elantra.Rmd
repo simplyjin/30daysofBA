@@ -1,0 +1,44 @@
+---
+title: "Elantra Sales"
+author: "Jin Chen"
+date: "10/8/2020"
+output: html_document
+---
+```{r}
+library(tidyverse)
+```
+
+
+# Problem 1 - Loading the Data
+
+Load the data set. Split the data set into training and testing sets as follows: place all observations for 2012 and earlier in the training set, and all observations for 2013 and 2014 into the testing set.
+
+How many observations are in the training set? 36
+
+```{r}
+elantra <- read_csv("../data/elantra.csv")
+str(elantra)
+
+elantra_train <- elantra %>% 
+  filter(Year <= 2012)
+
+elantra_test <- elantra %>% 
+  filter(Year > 2012)
+
+```
+
+# Problem 2.1 - A Linear Regression Model
+
+Build a linear regression model to predict monthly Elantra sales using Unemployment, CPI_all, CPI_energy and Queries as the independent variables. Use all of the training set data to do this.
+
+What is the model R-squared? Note: In this problem, we will always be asking for the "Multiple R-Squared" of the model.
+
+```{r}
+library(tidymodels)
+
+
+```
+
+
+# Problem 2.2 - Significant Variables
+How many variables are significant, or have levels that are significant? Use 0.10 as your p-value cutoff.

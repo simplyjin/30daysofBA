@@ -1,0 +1,65 @@
+---
+title: "unit3_recitation"
+author: "Jin Chen"
+date: "10/7/2020"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+NBA <- read_csv("../data/NBA_train.csv")
+
+str(NBA)
+
+table(NBA$W, NBA$Playoffs)
+
+NBA$PTSdiff <- NBA$PTS - NBA$oppPTS
+plot(NBA$PTSdiff, NBA$W)
+WinsReg <- lm(W ~ PTSdiff, data = NBA)
+summary(WinsReg)
+
+library(janitor)
+NBA <- clean_names(NBA)
+
+PointsReg <- lm(pts ~ x2pa + x3pa + fta + ast + orb + drb + tov + stl + blk, data = NBA)
+summary(PointsReg)
+PointsReg$residuals
+SSE <- sum(PointsReg$residuals^2)
+SSE
+RMSE <- sqrt(SSE/nrow(NBA))
+RMSE
+mean(NBA$pts)
+
+PointsReg2 <- lm(pts ~ x2pa + x3pa + fta + ast + orb + drb + stl + blk, data = NBA)
+summary(PointsReg2)
+
+PointsReg3 <- lm(pts ~ x2pa + x3pa + fta + ast + orb + stl + blk, data = NBA)
+summary(PointsReg3)
+
+PointsReg4 <- lm(pts ~ x2pa + x3pa + fta + ast + orb + stl, data = NBA)
+summary(PointsReg4)
+
+SSE_4 <- sum(PointsReg4$residuals^2)
+SSE_4
+RMSE_4 <- sqrt(SSE_4/nrow(NBA))
+RMSE_4
+```
+
+Making Predictions
+
+```{r}
+NBA_test <- read_csv("../data/NBA_test.csv")
+NBA_test <- clean_names(NBA_test)
+
+PointsPredictions <- predict(PointsReg4, newdata = NBA_test)
+SSE <- sum((PointsPredictions - NBA_test$pts)^2)
+SST <- sum((mean(NBA$pts) - NBA_test$pts)^2)
+RMSE <- sqrt(SSE/nrow(NBA_test))
+RMSE
+
+```
+
+

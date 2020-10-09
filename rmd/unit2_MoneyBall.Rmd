@@ -1,0 +1,51 @@
+---
+title: "unit3_moneyball"
+author: "Jin Chen"
+date: "10/6/2020"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+
+```
+
+```{r}
+baseball <- read_csv("../data/baseball.csv")
+str(baseball)
+
+moneyball <- subset(baseball, Year < 2002)
+moneyball$RD <- moneyball$RS - moneyball$RA
+plot(moneyball$RD, moneyball$W)
+WinsReg <- lm(W ~ RD, data = moneyball)
+summary(WinsReg)
+
+#if a team scores 713 runs and allows 614 runs, how many wins do we expect? 
+#RD is 713 - 614
+# W = 80.8814 + 0.1058(RD)
+80.814 +0.1058*(713 - 614)
+
+str(moneyball)
+#predicting runs
+RunsReg <- lm(RS ~ OBP + SLG + BA, data = moneyball)
+summary(RunsReg)
+
+RunsReg <- lm(RS ~ OBP + SLG, data = moneyball)
+summary(RunsReg)
+
+#RS = -804 + 2737.77(OBP) + 1584.91(SLG)
+-804 + 2737.77 * 0.311 + 1584.91 * 0.405
+
+RunsAllowed <- lm(RA ~ OOBP + OSLG, data = moneyball)
+summary(RunsAllowed)
+-837.38 + 2913.60 * 0.297 + 1514.29 * 0.370
+
+```
+
+```{r}
+teamRank = c(1,2,3,3,4,4,4,4,5,5)
+wins2012 <- c(94,88,95,88,93,94,98,97,93,94)
+wins2013 <- c(97,97,92,93,92,96,94,96,92,90)
+
+```
+
